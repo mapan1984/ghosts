@@ -1,9 +1,11 @@
-import os
 import re
-import threading
+import sys
+import os.path
+import argparse
 from urllib.request import urlopen
 
-from downloader import download
+# from thread_downloader import download
+from async_downloader import download
 
 HOSTS_URL = r"https://github.com/racaljk/hosts/raw/master/hosts"
 COMMIT_CODE_URL = "https://github.com/racaljk/hosts"
@@ -32,21 +34,30 @@ def refresh_commit_code(filename, commit_code):
     file.close()
 
 if __name__ == "__main__":
-    print("get new commit code...")
-    new_commit_code = get_new_commit_code(COMMIT_CODE_URL, COMMIT_CODE_REG)
-    if not os.path.isfile(COMMIT_CODE_FILE):
-        print("touch commit code file")
-        print("refresh hosts")
-        refresh_commit_code(COMMIT_CODE_FILE, new_commit_code)
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-f", "--force", action="store_true",
+                        help="force refresh hosts")
+    args = parser.parse_args()
+    if args.force:
+        print("force refresh hosts")
         download(HOSTS_URL, HOSTS_PATH)
     else:
-        print("new commit code is %s" % new_commit_code)
-        print("get old commit code...")
-        old_commit_code = get_old_commit_code(COMMIT_CODE_FILE)
-        print("old commit code is %s" % old_commit_code)
-        if old_commit_code != new_commit_code:
+        print("get new commit code...")
+        new_commit_code = get_new_commit_code(COMMIT_CODE_URL, COMMIT_CODE_REG)
+        if not os.path.isfile(COMMIT_CODE_FILE):
+            print("touch commit code file")
             print("refresh hosts")
             refresh_commit_code(COMMIT_CODE_FILE, new_commit_code)
             download(HOSTS_URL, HOSTS_PATH)
         else:
-            print("hosts is newst")
+            print("new commit code is %s" % new_commit_code)
+            print("get old commit code...")
+            old_commit_code = get_old_commit_code(COMMIT_CODE_FILE)
+            print("old commit code is %s" % old_commit_code)
+            if old_commit_code != new_commit_code:
+                print("refresh hosts")
+                refresh_commit_code(COMMIT_CODE_FILE, new_commit_code)
+                download(HOSTS_URL, HOSTS_PATH)
+            else:
+                print("hosts is up-to-date")
+

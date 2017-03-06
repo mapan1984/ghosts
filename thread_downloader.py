@@ -100,3 +100,4 @@ def download(url, filename):
 
 if __name__ == '__main__':
     download(HOSTS_URL, 'hosts')
+
