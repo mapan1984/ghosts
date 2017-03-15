@@ -4,8 +4,8 @@ import os.path
 import argparse
 from urllib.request import urlopen
 
-# from thread_downloader import download
-from async_downloader import download
+from downloader import download
+
 
 HOSTS_URL = r"https://github.com/racaljk/hosts/raw/master/hosts"
 COMMIT_CODE_URL = "https://github.com/racaljk/hosts"
@@ -14,6 +14,7 @@ LOCAL_DIR = os.path.abspath(os.path.dirname(__file__))
 COMMIT_CODE_FILE = os.path.join(LOCAL_DIR, "commit_code")
 HOSTS_DIR = r"C:\Windows\System32\drivers\etc"
 HOSTS_PATH = os.path.join(HOSTS_DIR, "hosts")
+
 
 def get_new_commit_code(url, reg):
     response = urlopen(url)
@@ -38,9 +39,11 @@ if __name__ == "__main__":
     parser.add_argument("-f", "--force", action="store_true",
                         help="force refresh hosts")
     args = parser.parse_args()
+
     if args.force:
         print("force refresh hosts")
         download(HOSTS_URL, HOSTS_PATH)
+        sys.exit(0)
     else:
         print("get new commit code...")
         new_commit_code = get_new_commit_code(COMMIT_CODE_URL, COMMIT_CODE_REG)
@@ -49,6 +52,7 @@ if __name__ == "__main__":
             print("refresh hosts")
             refresh_commit_code(COMMIT_CODE_FILE, new_commit_code)
             download(HOSTS_URL, HOSTS_PATH)
+            sys.exit(0)
         else:
             print("new commit code is %s" % new_commit_code)
             print("get old commit code...")
@@ -58,6 +62,8 @@ if __name__ == "__main__":
                 print("refresh hosts")
                 refresh_commit_code(COMMIT_CODE_FILE, new_commit_code)
                 download(HOSTS_URL, HOSTS_PATH)
+                sys.exit(0)
             else:
                 print("hosts is up-to-date")
+                sys.exit(1)
 
