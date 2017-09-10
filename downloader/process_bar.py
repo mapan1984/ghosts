@@ -1,3 +1,5 @@
+_FMT = '[{done_str}{empty_str}]{done_num}%'
+
 def make_process_bar(total, init_has_load=0):
     """ 构建process_bar, 显示进度条
     argv:
@@ -8,9 +10,12 @@ def make_process_bar(total, init_has_load=0):
         process_bar(has_load)
     """
     done_num = int(init_has_load/total * 100)
-    print("[{done_str}{empty_str}]{done_num}%".format(
-            done_str=">"*done_num, empty_str=" "*(100-done_num),
-            done_num=done_num), end='\r')
+    print(_FMT.format(
+            done_str=">".rjust(done_num, '#'),
+            empty_str=" "*(100-done_num),
+            done_num=done_num
+          ),
+          end='\r')
 
     def process_bar(has_load):
         """ 传入has_load，显示进度 """
@@ -19,9 +24,12 @@ def make_process_bar(total, init_has_load=0):
         if done_num != new_done_num:
             done_num = new_done_num
             rest_num = 100 - done_num
-            print("[{done_str}{empty_str}]{done_num}%".format(
-                    done_str=">"*done_num, empty_str=" "*(rest_num),
-                    done_num=done_num), end='\r')
+            print(_FMT.format(
+                    done_str=">".rjust(done_num, '#'),
+                    empty_str=" "*(100-done_num),
+                    done_num=done_num
+                  ),
+                  end='\r')
         if done_num == 100:
             print()
 

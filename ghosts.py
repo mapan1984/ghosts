@@ -7,8 +7,11 @@ from urllib.request import urlopen
 from downloader import download
 
 
-HOSTS_URL = r"https://github.com/racaljk/hosts/raw/master/hosts"
-COMMIT_CODE_URL = "https://github.com/racaljk/hosts"
+# COMMIT_CODE_URL = "https://github.com/racaljk/hosts"
+# HOSTS_URL = r"https://github.com/racaljk/hosts/raw/master/hosts"
+
+COMMIT_CODE_URL = "https://github.com/googlehosts/hosts"
+HOSTS_URL = r"https://raw.githubusercontent.com/googlehosts/hosts/master/hosts-files/hosts"
 COMMIT_CODE_REG = r'''<a\s+class="commit-tease-sha".*>\s*(.*)\s*</a>'''
 LOCAL_DIR = os.path.abspath(os.path.dirname(__file__))
 COMMIT_CODE_FILE = os.path.join(LOCAL_DIR, "commit_code")
