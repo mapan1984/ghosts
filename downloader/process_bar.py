@@ -1,5 +1,6 @@
 _FMT = '[{done_str}{empty_str}]{done_num}%'
 
+
 def make_process_bar(total, init_has_load=0):
     """ 构建process_bar, 显示进度条
     argv:
@@ -9,27 +10,31 @@ def make_process_bar(total, init_has_load=0):
         process_bar = make_process_bar(total, init_has_load=0)
         process_bar(has_load)
     """
-    done_num = int(init_has_load/total * 100)
-    print(_FMT.format(
+    done_num = int(init_has_load / total * 100)
+    print(
+        _FMT.format(
             done_str=">".rjust(done_num, '#'),
-            empty_str=" "*(100-done_num),
+            empty_str=" " * (100 - done_num),
             done_num=done_num
-          ),
-          end='\r')
+        ),
+        end='\r'
+    )
 
     def process_bar(has_load):
         """ 传入has_load，显示进度 """
         nonlocal done_num
-        new_done_num = int(has_load/total * 100)
+        new_done_num = int(has_load / total * 100)
         if done_num != new_done_num:
             done_num = new_done_num
-            rest_num = 100 - done_num
-            print(_FMT.format(
+            # rest_num = 100 - done_num
+            print(
+                _FMT.format(
                     done_str=">".rjust(done_num, '#'),
-                    empty_str=" "*(100-done_num),
+                    empty_str=" " * (100 - done_num),
                     done_num=done_num
-                  ),
-                  end='\r')
+                ),
+                end='\r'
+            )
         if done_num == 100:
             print()
 

@@ -1,7 +1,6 @@
-import os
 import queue
 import threading
-from urllib.request import Request, urlopen
+from urllib.request import urlopen
 from urllib.error import URLError, HTTPError
 
 from downloader.process_bar import make_process_bar
@@ -43,6 +42,7 @@ class Producer(threading.Thread):
             print("Response is closed.")
             response.close()
 
+
 class Consumer(threading.Thread):
     def __init__(self, filename, queue):
         super(Consumer, self).__init__()
@@ -60,7 +60,6 @@ class Consumer(threading.Thread):
             self.queue.task_done()
         file.close()
 
-HOSTS_URL = r"https://github.com/racaljk/hosts/raw/master/hosts"
 
 def download(url, filename):
     q = queue.Queue()
@@ -71,6 +70,8 @@ def download(url, filename):
     p.join()
     c.join()
 
+
 if __name__ == '__main__':
+    HOSTS_URL = r"https://github.com/racaljk/hosts/raw/master/hosts"
     download(HOSTS_URL, 'hosts')
 

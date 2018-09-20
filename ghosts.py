@@ -26,16 +26,19 @@ def get_new_commit_code(url, reg):
     response.close()
     return new_commit_code
 
+
 def get_old_commit_code(filename):
     file = open(filename, "r")
     old_commit_code = file.read()
     file.close()
     return old_commit_code
 
+
 def refresh_commit_code(filename, commit_code):
     file = open(filename, "w")
     file.write(commit_code)
     file.close()
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()

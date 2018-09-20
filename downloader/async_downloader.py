@@ -6,10 +6,10 @@ from downloader.process_bar import make_process_bar
 
 async def fetch(url, queue, loop=None):
     headers = {
-        'Accept-Encoding':'*',
-        'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
-                     'AppleWebKit/537.36 (KHTML, like Gecko) '
-                     'Chrome/53.0.2785.116 Safari/537.36',
+        'Accept-Encoding': '*',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
+                      'AppleWebKit/537.36 (KHTML, like Gecko) '
+                      'Chrome/53.0.2785.116 Safari/537.36',
     }
     chunk_size = 1024
     async with aiohttp.ClientSession(loop=loop) as session:
@@ -27,6 +27,7 @@ async def fetch(url, queue, loop=None):
                 await queue.put(chunk)
     await queue.put(None)
 
+
 async def save(filename, queue):
     with open(filename, 'wb') as fd:
         while True:
@@ -35,7 +36,6 @@ async def save(filename, queue):
                 break
             fd.write(chunk)
 
-HOSTS_URL = r"https://github.com/racaljk/hosts/raw/master/hosts"
 
 def download(url, filename):
     loop = asyncio.get_event_loop()
@@ -45,6 +45,8 @@ def download(url, filename):
     loop.run_until_complete(asyncio.gather(fetcher, saver))
     loop.close()
 
+
 if __name__ == '__main__':
+    HOSTS_URL = r"https://github.com/racaljk/hosts/raw/master/hosts"
     download(HOSTS_URL, 'hosts')
 
